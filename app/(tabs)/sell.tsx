@@ -7,8 +7,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { launchImageLibrary, ImagePickerResponse } from 'react-native-image-picker';
 
 interface Book {
-  university: string;
-  fieldOfStudy: string;
+  category: string;
+  subcategory: string;
   bookTitle: string;
   year: string;
   publisher: string; 
@@ -17,8 +17,8 @@ interface Book {
 }
 
 const BrowseScreen = () => {
-  const [university, setUniversity] = useState('');
-  const [fieldOfStudy, setFieldOfStudy] = useState('');
+  const [category, setCategory] = useState('');
+  const [subcategory, setSubCategory] = useState('');
   const [bookTitle, setBookTitle] = useState('');
   const [year, setYear] = useState('');
   const [publisher, setPublisher] = useState('');
@@ -44,10 +44,10 @@ const BrowseScreen = () => {
   }, []);
 
   const handleUpload = async () => {
-    if (bookTitle && university && fieldOfStudy && year && publisher && price) {
+    if (bookTitle && category && subcategory && year && publisher && price) {
       const newBook: Book = {
-        university,
-        fieldOfStudy,
+        category,
+        subcategory,
         bookTitle,
         year,
         publisher,
@@ -67,8 +67,8 @@ const BrowseScreen = () => {
       }
 
 
-      setUniversity('');
-      setFieldOfStudy('');
+      setCategory('');
+      setSubCategory('');
       setBookTitle('');
       setYear('');
       setPublisher('');
@@ -119,24 +119,24 @@ const BrowseScreen = () => {
         <ThemedText type="title" style={[styles.title]}>Sælg din bog</ThemedText>
 
         <Picker
-          selectedValue={university}
-          onValueChange={(itemValue: string) => setUniversity(itemValue)}
+          selectedValue={category}
+          onValueChange={(itemValue: string) => setCategory(itemValue)}
           style={styles.picker}
         >
-          <Picker.Item label="Vælg Universitet" value="" />
-          <Picker.Item label="Copenhagen Business School" value="Copenhagen Business School" />
-          <Picker.Item label="Københavns Universitet" value="Københavns Universitet" />
-          <Picker.Item label="Roskilde Universitet" value="Roskilde Universitet" />
-          <Picker.Item label="Carlsberg Campus" value="Carlsberg Campus" />
-          <Picker.Item label="Aalborg Universitet" value="Aalborg Universitet" />
-          <Picker.Item label="NEXT" value="NEXT" />
+          <Picker.Item label="Vælg kategori" value="" />
+          <Picker.Item label="Studiebøger" value="Studiebøger" />
+          <Picker.Item label="Fantasy" value="Fantasy" />
+          <Picker.Item label="Romatisk" value="Romantisk" />
+          <Picker.Item label="Thriller" value="Thriller" />
+          <Picker.Item label="Scifi" value="Scifi" />
+          <Picker.Item label="Romcom" value="Romcom" />
         </Picker>
 
         <TextInput
           style={styles.input}
-          placeholder="Retning"
-          value={fieldOfStudy}
-          onChangeText={setFieldOfStudy}
+          placeholder="studieretning"
+          value={subcategory}
+          onChangeText={setSubCategory}
         />
         <TextInput
           style={styles.input}
