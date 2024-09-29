@@ -27,7 +27,7 @@ export default function HomeScreen() {
       }
     >
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">BookSwap</ThemedText>
+        <ThemedText type="title">FlipShelf</ThemedText>
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">Del og opdag brugte bøger</ThemedText>

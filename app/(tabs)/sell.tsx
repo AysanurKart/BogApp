@@ -114,7 +114,7 @@ const BrowseScreen = () => {
           source={require('@/assets/images/bog.png')}
           style={styles.logo}
         />
-        <ThemedText type="title" style={styles.headerText}>BOOKSWAP</ThemedText>
+        <ThemedText type="title" style={styles.headerText}>FlipShelf</ThemedText>
       </View>
 
       <ScrollView contentContainerStyle={styles.scrollContainer}>

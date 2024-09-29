@@ -64,7 +64,7 @@ const ReviewsScreen = () => {
           source={require('@/assets/images/bog.png')} 
           style={styles.logo}
         />
-        <Text style={styles.headerText}>BOOKSWAP</Text>
+        <Text style={styles.headerText}>FlipShelf</Text>
       </View>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <TextInput
