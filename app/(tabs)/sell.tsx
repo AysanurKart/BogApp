@@ -13,6 +13,7 @@ interface Book {
   year: string;
   publisher: string; 
   price: string;
+  author: string; // Tilføjet felt
   imageUri?: string;
 }
 
@@ -23,6 +24,7 @@ const BrowseScreen = () => {
   const [year, setYear] = useState('');
   const [publisher, setPublisher] = useState('');
   const [price, setPrice] = useState('');
+  const [author, setAuthor] = useState(''); // Tilføjet tilstand
   const [imageUri, setImageUri] = useState<string | undefined>(undefined);
   const [books, setBooks] = useState<Book[]>([]);
 
@@ -44,7 +46,7 @@ const BrowseScreen = () => {
   }, []);
 
   const handleUpload = async () => {
-    if (bookTitle && category && subcategory && year && publisher && price) {
+    if (bookTitle && category && subcategory && year && publisher && price && author) { // Tilføjet author
       const newBook: Book = {
         category,
         subcategory,
@@ -52,6 +54,7 @@ const BrowseScreen = () => {
         year,
         publisher,
         price,
+        author, // Tilføjet her
         imageUri,
       };
 
@@ -60,12 +63,11 @@ const BrowseScreen = () => {
 
       try {
         await AsyncStorage.setItem('books', JSON.stringify(updatedBooks));
-        Alert.alert('Bogen er blevet uploadet!', `Titel: ${bookTitle}`);
+        Alert.alert('Bogen er blevet uploadet!', `Titel: ${bookTitle}, Forfatter: ${author}`); 
       } catch (error) {
         console.error("Fejl ved gemme bogen", error);
         Alert.alert('Fejl', 'Kunne ikke gemme bogen.');
       }
-
 
       setCategory('');
       setSubCategory('');
@@ -73,6 +75,7 @@ const BrowseScreen = () => {
       setYear('');
       setPublisher('');
       setPrice('');
+      setAuthor(''); // Tilføjet
       setImageUri(undefined);
     } else {
       Alert.alert('Fejl', 'Udfyld venligst alle felter.');
@@ -103,7 +106,6 @@ const BrowseScreen = () => {
       }
     });
   };
-  
 
   return (
     <ThemedView style={styles.container}>
@@ -116,7 +118,7 @@ const BrowseScreen = () => {
       </View>
 
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <ThemedText type="title" style={[styles.title]}>Sælg din bog</ThemedText>
+        <ThemedText type="title" style={styles.title}>Sælg din bog</ThemedText>
 
         <Picker
           selectedValue={category}
@@ -134,7 +136,7 @@ const BrowseScreen = () => {
 
         <TextInput
           style={styles.input}
-          placeholder="studieretning"
+          placeholder="Studieretning"
           value={subcategory}
           onChangeText={setSubCategory}
         />
@@ -159,34 +161,42 @@ const BrowseScreen = () => {
         />
         <TextInput
           style={styles.input}
+          placeholder="Forfatter" // Tilføjet
+          value={author}
+          onChangeText={setAuthor}
+        />
+        <TextInput
+          style={styles.input}
           placeholder="Pris"
           value={price}
           onChangeText={setPrice}
           keyboardType="numeric"
         />
 
-<Button title="Vælg billede" onPress={selectImage} color="#007AFF" />
+        <Button title="Vælg billede" onPress={selectImage} color="#007AFF" />
         
         {imageUri && (
           <Image source={{ uri: imageUri }} style={styles.imagePreview} />
         )}
 
         <Button title="Upload" onPress={handleUpload} color="#007AFF" />
-      </ScrollView>
 
-      <ThemedText type="title" style={styles.sectionTitle}>Mine Bøger</ThemedText>
-      <FlatList
-        data={books}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => (
-          <View style={styles.bookItem}>
-            <Text style={styles.bookTitle}>{item.bookTitle}</Text>
-            <Text style={styles.bookPublisher}>Forlag: {item.publisher}</Text>
-            {item.imageUri && <Image source={{ uri: item.imageUri }} style={styles.bookImage} />}
-            <Button title="Slet" onPress={() => deleteBook(item)} color="#FF3B30" />
-          </View>
-        )}
-      />
+        <ThemedText type="title" style={styles.sectionTitle}>Mine Bøger</ThemedText>
+        <FlatList
+          data={books}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item }) => (
+            <View style={styles.bookItem}>
+              <Text style={styles.bookTitle}>{item.bookTitle}</Text>
+              <Text style={styles.bookPublisher}>Forlag: {item.publisher}</Text>
+              <Text style={styles.bookAuthor}>Forfatter: {item.author}</Text> 
+              <Text style={styles.price}>Pris: {item.price} Kr</Text> 
+              {item.imageUri && <Image source={{ uri: item.imageUri }} style={styles.bookImage} />}
+              <Button title="Slet" onPress={() => deleteBook(item)} color="#FF3B30" />
+            </View>
+          )}
+        />
+      </ScrollView>
     </ThemedView>
   );
 };
@@ -253,6 +263,14 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   bookPublisher: {
+    fontSize: 14,
+    color: 'gray',
+  },
+  bookAuthor: {
+    fontSize: 14,
+    color: 'gray',
+  },
+  price: {
     fontSize: 14,
     color: 'gray',
   },
