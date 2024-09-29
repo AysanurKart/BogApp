@@ -13,7 +13,7 @@ interface Book {
   year: string;
   publisher: string; 
   price: string;
-  author: string; // Tilføjet felt
+  author: string;
   imageUri?: string;
 }
 
@@ -24,7 +24,7 @@ const BrowseScreen = () => {
   const [year, setYear] = useState('');
   const [publisher, setPublisher] = useState('');
   const [price, setPrice] = useState('');
-  const [author, setAuthor] = useState(''); // Tilføjet tilstand
+  const [author, setAuthor] = useState('');
   const [imageUri, setImageUri] = useState<string | undefined>(undefined);
   const [books, setBooks] = useState<Book[]>([]);
 
@@ -46,7 +46,7 @@ const BrowseScreen = () => {
   }, []);
 
   const handleUpload = async () => {
-    if (bookTitle && category && subcategory && year && publisher && price && author) { // Tilføjet author
+    if (bookTitle && category && subcategory && year && publisher && price && author) { 
       const newBook: Book = {
         category,
         subcategory,
@@ -54,7 +54,7 @@ const BrowseScreen = () => {
         year,
         publisher,
         price,
-        author, // Tilføjet her
+        author,
         imageUri,
       };
 
@@ -75,7 +75,7 @@ const BrowseScreen = () => {
       setYear('');
       setPublisher('');
       setPrice('');
-      setAuthor(''); // Tilføjet
+      setAuthor('');
       setImageUri(undefined);
     } else {
       Alert.alert('Fejl', 'Udfyld venligst alle felter.');
@@ -161,7 +161,7 @@ const BrowseScreen = () => {
         />
         <TextInput
           style={styles.input}
-          placeholder="Forfatter" // Tilføjet
+          placeholder="Forfatter"
           value={author}
           onChangeText={setAuthor}
         />

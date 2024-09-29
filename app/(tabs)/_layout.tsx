@@ -8,7 +8,7 @@ import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme(); // This should return 'light' | 'dark' | null
+  const colorScheme = useColorScheme(); 
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
