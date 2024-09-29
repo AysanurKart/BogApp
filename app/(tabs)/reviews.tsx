@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, ActivityIndicator, StyleSheet, TextInput, Image, ScrollView } from 'react-native';
 
-const NYT_API_KEY = 'z4jSQg7oGqsLaA7qpXp2qtnKzaYC34su'; // Replace with your actual API key
+const NYT_API_KEY = 'z4jSQg7oGqsLaA7qpXp2qtnKzaYC34su'; 
 
 const ReviewsScreen = () => {
   const [books, setBooks] = useState<any[]>([]);
@@ -61,7 +61,7 @@ const ReviewsScreen = () => {
     <View style={styles.container}>
       <View style={styles.headerContainer}>
         <Image
-          source={require('@/assets/images/bog.png')} // Add your logo path
+          source={require('@/assets/images/bog.png')} 
           style={styles.logo}
         />
         <Text style={styles.headerText}>BOOKSWAP</Text>

@@ -11,7 +11,7 @@ interface Book {
   fieldOfStudy: string;
   bookTitle: string;
   year: string;
-  publisher: string; // Publisher is still a string
+  publisher: string; 
   price: string;
   imageUri?: string;
 }
@@ -50,7 +50,7 @@ const BrowseScreen = () => {
         fieldOfStudy,
         bookTitle,
         year,
-        publisher, // Ensure publisher is included
+        publisher,
         price,
         imageUri,
       };
@@ -66,7 +66,7 @@ const BrowseScreen = () => {
         Alert.alert('Fejl', 'Kunne ikke gemme bogen.');
       }
 
-      // Reset input fields
+
       setUniversity('');
       setFieldOfStudy('');
       setBookTitle('');
@@ -93,7 +93,7 @@ const BrowseScreen = () => {
 
   const selectImage = () => {
     launchImageLibrary({ mediaType: 'photo', quality: 1 }, (response: ImagePickerResponse) => {
-      console.log('Image Picker Response:', response); // Log the response
+      console.log('Image Picker Response:', response); 
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.assets && response.assets.length > 0) {
@@ -154,7 +154,7 @@ const BrowseScreen = () => {
         <TextInput
           style={styles.input}
           placeholder="Forlag"
-          value={publisher} // This remains a text input
+          value={publisher} 
           onChangeText={setPublisher}
         />
         <TextInput
