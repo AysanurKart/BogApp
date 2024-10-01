@@ -17,6 +17,7 @@ export default function TabLayout() {
           tabBarActiveTintColor: Colors[(colorScheme ?? 'light') as 'light' | 'dark'].tint,
           headerShown: false,
         }}
+      
       >
         <Tabs.Screen
           name="index"
@@ -24,6 +25,15 @@ export default function TabLayout() {
             title: 'Home',
             tabBarIcon: ({ color, focused }) => (
               <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
+            ),
+          }}
+        />
+       <Tabs.Screen
+          name="login"
+          options={{
+            title: 'Log ind',
+            tabBarIcon: ({ color, focused }) => (
+              <TabBarIcon name={focused ? 'person' : 'person-outline'} color={color} />
             ),
           }}
         />
@@ -45,6 +55,7 @@ export default function TabLayout() {
             ),
           }}
         />
+        
       </Tabs>
     </GestureHandlerRootView>
   );
