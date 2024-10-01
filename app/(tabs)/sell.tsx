@@ -4,7 +4,7 @@ import { Picker } from '@react-native-picker/picker';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { launchImageLibrary, ImagePickerResponse } from 'react-native-image-picker';
+import * as ImagePicker from 'expo-image-picker';
 
 interface Book {
   category: string;
@@ -95,16 +95,58 @@ const BrowseScreen = () => {
   };
 
   const selectImage = () => {
-    launchImageLibrary({ mediaType: 'photo', quality: 1 }, (response: ImagePickerResponse) => {
-      console.log('Image Picker Response:', response); 
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.assets && response.assets.length > 0) {
-        setImageUri(response.assets[0].uri);
-      } else {
-        console.error('ImagePicker Error: ', response);
-      }
+    Alert.alert(
+      'Vælg billede',
+      'Hvordan vil du vælge billedet?',
+      [
+        {
+          text: 'Kamera',
+          onPress: openCamera,
+        },
+        {
+          text: 'Bibliotek',
+          onPress: openImageLibrary,
+        },
+        {
+          text: 'Annuller',
+          style: 'cancel',
+        },
+      ]
+    );
+  };
+
+  const openCamera = async () => {
+    const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+    if (permissionResult.granted === false) {
+      alert('Adgang til kameraet er påkrævet!');
+      return;
+    }
+
+    const result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 1,
     });
+
+    if (!result.canceled && result.assets && result.assets.length > 0) {
+      setImageUri(result.assets[0].uri); // Get the URI from the first asset
+    }
+  };
+
+  const openImageLibrary = async () => {
+    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (permissionResult.granted === false) {
+      alert('Adgang til billedbiblioteket er påkrævet!');
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 1,
+    });
+
+    if (!result.canceled && result.assets && result.assets.length > 0) {
+      setImageUri(result.assets[0].uri); // Get the URI from the first asset
+    }
   };
 
   return (
@@ -132,6 +174,12 @@ const BrowseScreen = () => {
           <Picker.Item label="Thriller" value="Thriller" />
           <Picker.Item label="Scifi" value="Scifi" />
           <Picker.Item label="Romcom" value="Romcom" />
+          <Picker.Item label="Krimi" value="Krimi" />
+          <Picker.Item label="Biografier" value="Biografier" />
+          <Picker.Item label="Sundhed" value="Sundhed" />
+          <Picker.Item label="Mad og Drikke" value="Mad og Drikke" />
+          <Picker.Item label="Økonomi" value="Økonomi" />
+          <Picker.Item label="Erhverv og ledelse" value="Erhverv og ledelse" />
         </Picker>
 
         <TextInput
@@ -220,7 +268,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   scrollContainer: {
-    paddingBottom: 16,
+    paddingBottom: 20,
   },
   title: {
     fontSize: 20,
@@ -237,42 +285,45 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 1,
     marginBottom: 16,
-    paddingHorizontal: 8,
+    paddingLeft: 8,
   },
   imagePreview: {
-    width: 100,
-    height: 300,
-    marginVertical: 10,
-  },
-  bookImage: {
-    width: 50,
-    height: 75,
-    marginVertical: 10,
+    width: '100%',
+    height: 200,
+    marginVertical: 16,
+    resizeMode: 'contain',
   },
   sectionTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    marginVertical: 16,
+    marginTop: 20,
   },
   bookItem: {
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 8,
     padding: 10,
-    borderBottomColor: 'gray',
-    borderBottomWidth: 1,
+    marginVertical: 8,
   },
   bookTitle: {
-    fontSize: 18,
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   bookPublisher: {
     fontSize: 14,
-    color: 'gray',
   },
   bookAuthor: {
     fontSize: 14,
-    color: 'gray',
   },
   price: {
     fontSize: 14,
-    color: 'gray',
+    fontWeight: 'bold',
+  },
+  bookImage: {
+    width: '100%',
+    height: 100,
+    marginVertical: 8,
+    resizeMode: 'contain',
   },
 });
 
