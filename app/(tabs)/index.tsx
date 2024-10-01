@@ -5,6 +5,7 @@ import { ThemedView } from '@/components/ThemedView';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation } from 'expo-router';
 
+
 export default function HomeScreen() {
   const navigation = useNavigation();
 

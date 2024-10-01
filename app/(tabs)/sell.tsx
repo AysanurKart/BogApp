@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, TextInput, Button, Alert, ScrollView, Image, FlatList, Text } from 'react-native';
+import { StyleSheet, View, TextInput, Button, Alert, ScrollView, FlatList, Image } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from 'expo-image-picker';
+
 
 interface Book {
   category: string;
@@ -13,6 +14,9 @@ interface Book {
   year: string;
   publisher: string; 
   price: string;
+  location: string;
+  postalCode: string; // New field for postal code
+  city: string; // New field for city
   author: string;
   imageUri?: string;
 }
@@ -24,6 +28,9 @@ const BrowseScreen = () => {
   const [year, setYear] = useState('');
   const [publisher, setPublisher] = useState('');
   const [price, setPrice] = useState('');
+  const [location, setLocation] = useState('');
+  const [postalCode, setPostalCode] = useState(''); // New state for postal code
+  const [city, setCity] = useState(''); // New state for city
   const [author, setAuthor] = useState('');
   const [imageUri, setImageUri] = useState<string | undefined>(undefined);
   const [books, setBooks] = useState<Book[]>([]);
@@ -46,7 +53,7 @@ const BrowseScreen = () => {
   }, []);
 
   const handleUpload = async () => {
-    if (bookTitle && category && subcategory && year && publisher && price && author) { 
+    if (bookTitle && category && subcategory && year && publisher && price && author && postalCode && city) { // Ensure new fields are filled
       const newBook: Book = {
         category,
         subcategory,
@@ -54,6 +61,9 @@ const BrowseScreen = () => {
         year,
         publisher,
         price,
+        location,
+        postalCode, // Include postal code
+        city, // Include city
         author,
         imageUri,
       };
@@ -69,12 +79,16 @@ const BrowseScreen = () => {
         Alert.alert('Fejl', 'Kunne ikke gemme bogen.');
       }
 
+      // Reset fields
       setCategory('');
       setSubCategory('');
       setBookTitle('');
       setYear('');
       setPublisher('');
       setPrice('');
+      setLocation('');
+      setPostalCode(''); // Reset postal code
+      setCity(''); // Reset city
       setAuthor('');
       setImageUri(undefined);
     } else {
@@ -220,29 +234,49 @@ const BrowseScreen = () => {
           onChangeText={setPrice}
           keyboardType="numeric"
         />
-
+        <TextInput
+          style={styles.input}
+          placeholder="Postnummer"
+          value={postalCode}
+          onChangeText={setPostalCode} // Update postal code
+          keyboardType="numeric"
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="By"
+          value={city}
+          onChangeText={setCity} // Update city
+        />
+        
         <Button title="Vælg billede" onPress={selectImage} color="#007AFF" />
         
         {imageUri && (
           <Image source={{ uri: imageUri }} style={styles.imagePreview} />
         )}
 
-        <Button title="Upload" onPress={handleUpload} color="#007AFF" />
-
-        <ThemedText type="title" style={styles.sectionTitle}>Mine Bøger</ThemedText>
+        <Button title="Upload Bog" onPress={handleUpload} color="#007AFF" />
+        
+        <ThemedText type="title" style={styles.title}>Dine bøger</ThemedText>
         <FlatList
           data={books}
-          keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
             <View style={styles.bookItem}>
-              <Text style={styles.bookTitle}>{item.bookTitle}</Text>
-              <Text style={styles.bookPublisher}>Forlag: {item.publisher}</Text>
-              <Text style={styles.bookAuthor}>Forfatter: {item.author}</Text> 
-              <Text style={styles.price}>Pris: {item.price} Kr</Text> 
-              {item.imageUri && <Image source={{ uri: item.imageUri }} style={styles.bookImage} />}
-              <Button title="Slet" onPress={() => deleteBook(item)} color="#FF3B30" />
+              {item.imageUri && (
+                <Image source={{ uri: item.imageUri }} style={styles.bookImage} />
+              )}
+              <View style={styles.bookDescription}>
+                <ThemedText style={styles.bookTitle}>{item.bookTitle}</ThemedText>
+                <ThemedText>Forfatter: {item.author}</ThemedText>
+                <ThemedText>År: {item.year}</ThemedText>
+                <ThemedText>Forlag: {item.publisher}</ThemedText>
+                <ThemedText>Pris: {item.price} DKK</ThemedText>
+                <ThemedText>Postnummer: {item.postalCode}</ThemedText>
+                <ThemedText>By: {item.city}</ThemedText>
+                <Button title="Slet" onPress={() => deleteBook(item)} color="red" />
+              </View>
             </View>
           )}
+          keyExtractor={(item, index) => index.toString()}
         />
       </ScrollView>
     </ThemedView>
@@ -252,16 +286,16 @@ const BrowseScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    padding: 20,
   },
   headerContainer: {
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: 20,
   },
   logo: {
     width: 100,
     height: 100,
-    marginBottom: 8,
+    marginBottom: 10,
   },
   headerText: {
     fontSize: 24,
@@ -273,57 +307,43 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 16,
+    marginBottom: 10,
   },
   picker: {
-    height: 50,
-    width: '100%',
-    marginBottom: 16,
+    marginBottom: 10,
   },
   input: {
-    height: 40,
-    borderColor: 'gray',
     borderWidth: 1,
-    marginBottom: 16,
-    paddingLeft: 8,
+    borderColor: '#ccc',
+    borderRadius: 4,
+    padding: 10,
+    marginBottom: 10,
   },
   imagePreview: {
     width: '100%',
-    height: 200,
-    marginVertical: 16,
-    resizeMode: 'contain',
-  },
-  sectionTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginTop: 20,
+    height: 150,
+    marginVertical: 10,
+    resizeMode: 'cover',
   },
   bookItem: {
-    borderColor: 'gray',
-    borderWidth: 1,
-    borderRadius: 8,
-    padding: 10,
-    marginVertical: 8,
-  },
-  bookTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  bookPublisher: {
-    fontSize: 14,
-  },
-  bookAuthor: {
-    fontSize: 14,
-  },
-  price: {
-    fontSize: 14,
-    fontWeight: 'bold',
+    flexDirection: 'column', // Stack elements vertically
+    alignItems: 'flex-start', // Align content to the left
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
   },
   bookImage: {
-    width: '100%',
-    height: 100,
-    marginVertical: 8,
-    resizeMode: 'contain',
+    width: 200, // Make the image wide
+    height: 300, // Give the image a fixed height
+    marginBottom: 10, // Space between image and text
+  },
+  bookDescription: {
+    paddingHorizontal: 10, // Padding for the description
+  },
+  bookTitle: {
+    fontWeight: 'bold',
+    fontSize: 18,
+    marginBottom: 5,
   },
 });
 
