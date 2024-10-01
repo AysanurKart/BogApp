@@ -18,6 +18,7 @@ interface Book {
   postalCode: string; // New field for postal code
   city: string; // New field for city
   author: string;
+  description: string; // New field for description
   imageUri?: string;
 }
 
@@ -32,6 +33,7 @@ const BrowseScreen = () => {
   const [postalCode, setPostalCode] = useState(''); // New state for postal code
   const [city, setCity] = useState(''); // New state for city
   const [author, setAuthor] = useState('');
+  const [description, setDescription] = useState(''); // New state for description
   const [imageUri, setImageUri] = useState<string | undefined>(undefined);
   const [books, setBooks] = useState<Book[]>([]);
 
@@ -65,6 +67,7 @@ const BrowseScreen = () => {
         postalCode, // Include postal code
         city, // Include city
         author,
+        description,
         imageUri,
       };
 
@@ -90,6 +93,7 @@ const BrowseScreen = () => {
       setPostalCode(''); // Reset postal code
       setCity(''); // Reset city
       setAuthor('');
+      setDescription(''); // Reset description
       setImageUri(undefined);
     } else {
       Alert.alert('Fejl', 'Udfyld venligst alle felter.');
@@ -247,6 +251,14 @@ const BrowseScreen = () => {
           value={city}
           onChangeText={setCity} // Update city
         />
+         <TextInput
+          style={styles.input}
+          placeholder="Beskrivelse"
+          value={description} // Add description input
+          onChangeText={setDescription} // Update description state
+          multiline={true} // Allow multiple lines for description
+          numberOfLines={4} // Set the number of lines displayed
+        />
         
         <Button title="Vælg billede" onPress={selectImage} color="#007AFF" />
         
@@ -272,6 +284,7 @@ const BrowseScreen = () => {
                 <ThemedText>Pris: {item.price} DKK</ThemedText>
                 <ThemedText>Postnummer: {item.postalCode}</ThemedText>
                 <ThemedText>By: {item.city}</ThemedText>
+                <ThemedText>Beksrivelse: {item.description}</ThemedText>
                 <Button title="Slet" onPress={() => deleteBook(item)} color="red" />
               </View>
             </View>
